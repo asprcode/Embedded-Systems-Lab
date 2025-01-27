@@ -1,0 +1,40 @@
+; division by reapeated subtraction in loop
+
+	AREA RESET, DATA, READONLY
+	EXPORT __Vectors
+__Vectors
+	DCD 0X10001000
+	DCD Reset_Handler
+	ALIGN
+	
+	AREA mysrc, CODE, READONLY
+VAL1 DCD 0X8
+	
+	AREA mydst, CODE, READONLY
+VAL2 DCD 0X4
+	
+	AREA quotient, DATA, READWRITE
+QUO DCD 0
+	
+	AREA remainder, DATA, READWRITE
+REM DCD 0
+
+	AREA mycode, CODE, READONLY
+	ENTRY
+	EXPORT Reset_Handler
+Reset_Handler
+	LDR R0, =VAL1
+	LDR R1, [R0]
+	LDR R2, =VAL2
+	LDR R3, [R2]
+L2	CMP R1, R3
+	BCC L1
+	SUB R4, R2, R3
+	ADD R4, #1
+	B L2
+L1	LDR R0, =QUO
+	LDR R2, =REM
+	STR R4, [R0]
+	STR R1, [R2]
+STOP B STOP
+	END
